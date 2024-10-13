@@ -26,7 +26,7 @@ def index():
 # Function to log SQL queries after each request
 @app.after_request
 def sql_debug(response):
-    from flask_sqlalchemy.record_queries import get_recorded_queries  # Import for recording queries
+    from flask_sqlalchemy.record_queries import get_recorded_queries
     
     queries = list(get_recorded_queries())
     query_str = ''
@@ -34,7 +34,13 @@ def sql_debug(response):
     
     for q in queries:
         total_duration += q.duration
-        stmt = str(q.statement % q.parameters).replace('\n', '\n       ')
+        stmt = str(q.statement)
+        
+        # Here, we manually substitute the parameters into the query string for display purposes
+        if q.parameters:
+            stmt = stmt % q.parameters
+            
+        stmt = stmt.replace('\n', '\n       ')
         query_str += 'Query: {0}\nDuration: {1}ms\n\n'.format(stmt, round(q.duration * 1000, 2))
 
     print('=' * 80)
@@ -44,6 +50,7 @@ def sql_debug(response):
     print('=' * 80 + '\n')
 
     return response
+
 
 # Start the app
 if __name__ == "__main__":
