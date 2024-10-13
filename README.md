@@ -1,0 +1,1 @@
+This Flask application serves as a basic web application for managing user data using Flask-SQLAlchemy. It allows you to store and retrieve user information, including their name, email, and the date they joined the system.
